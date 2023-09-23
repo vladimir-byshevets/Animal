@@ -21,6 +21,10 @@ contract Animal{
         return "Z-z-z-z-z-z-z";
     }
 
+    function eat(string memory _food) virtual view public returns(string memory){
+        return string.concat("Animal eats", _food);
+    }
+
     function speak() view public returns (string memory){
         return string.concat(name, " speak - ", speaks);
     }
@@ -30,7 +34,7 @@ contract Animal{
 abstract contract Herbivore is Animal{
     string canEat = "plant";
 
-    function eat(string memory _food)  view public returns(string memory){
+    function eat(string memory _food)  override view public returns(string memory){
         require(StringComparer.compare(_food, canEat),"Herbivore cannot eat this");
     return "Non-nom";
     }
@@ -39,7 +43,7 @@ abstract contract Herbivore is Animal{
 abstract contract Carnivore is Animal{
     string canEat = "meat";
 
-    function eat(string memory _food)  view public returns(string memory){
+    function eat(string memory _food)  override view public returns(string memory){
         require(StringComparer.compare(_food, canEat),"A meat-eating animal cannot eat this");
     return "Non-nom";
     }
@@ -47,7 +51,7 @@ abstract contract Carnivore is Animal{
 
 abstract contract Omnivore is Animal{
 
-    function eat(string memory _food) pure public returns(string memory){
+    function eat(string memory _food) override pure public returns(string memory){
         if(StringComparer.compare(_food, "meat") || StringComparer.compare(_food, "plant") || StringComparer.compare(_food, "chocolate")){
             return "Non-nom";
         }
@@ -56,9 +60,9 @@ abstract contract Omnivore is Animal{
 }
 
 contract Horse is Herbivore{
-
    string _name = "Horse";
    string _speaks = "Igogo";
+
    constructor () Animal(_name, _speaks){
    }
 }
@@ -72,12 +76,12 @@ contract Cow is Herbivore{
 }
 
 contract Dog is Animal{
-    
    string   _name = "Dog";
    string   _speaks = "Woof";
+
    constructor () Animal(_name, _speaks){
    }
-    function eat(string memory feed) pure  public  returns(string memory){
+    function eat(string memory feed) override pure  public  returns(string memory){
 
         require(!StringComparer.compare(feed, "chocolate"), "Dogs cannot eat chocolate!");
         if(StringComparer.compare(feed, "meat") || StringComparer.compare(feed, "plant")){
@@ -89,18 +93,17 @@ contract Dog is Animal{
 }
 
 contract Wolf is Carnivore{
-    
    string   _name = "Wolf";
    string   _speaks = "Awwwooooo";
+
    constructor () Animal(_name, _speaks){
    }
 }
 
 contract Pig is Omnivore{
-    
    string   _name = "Pig";
    string   _speaks = "Oink oink";
+
    constructor () Animal(_name, _speaks){
    }
 }
-
